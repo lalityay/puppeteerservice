@@ -1,0 +1,14 @@
+{
+  "name": "puppeteerservice",
+  "version": "0.0.0",
+  "description": "puppeteerservice",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "chrome-aws-lambda": "^2.0.1",
+    "puppeteer": "^2.0.0",
+    "puppeteer-core": "^2.0.0"
+  }
+}
