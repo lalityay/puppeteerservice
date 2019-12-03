@@ -3,7 +3,9 @@ var http = require('http');
 var port = process.env.PORT || 8080;
 
 const server = http.createServer();
-const chromium = require('chrome-aws-lambda');
+//const chromium = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer');
+
 var fs = require('fs');
 
 server.on('request', async (req, res) => {
@@ -26,12 +28,9 @@ async function someAsyncFunc() {
     let browser = null;
 
     try {
-        browser = await chromium.puppeteer.launch({
-            args: chromium.args,
-            defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath,
+        browser = await puppeteer.launch({
             headless: false,
-            // headless: chromium.headless,
+            args: ['--headless'],
         });
 
         let page = await browser.newPage();
@@ -42,6 +41,8 @@ async function someAsyncFunc() {
         var headers = {
             'cookie': contents
         }
+
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36');
         await page.setExtraHTTPHeaders(headers);
         await page.setCacheEnabled(true);
         await page.setRequestInterception(true);
@@ -74,7 +75,7 @@ async function someAsyncFunc() {
                 await page.goto("about:blank");
                 var url = "https://platform.marketintelligence.spglobal.com/web/client?auth=inherit&overridecdc=1&#" + pageUrl + "&rbExportType=Pdf&kss=&ReportBuilderQuery=1";
                 console.log("url:goto  " + pageUrl);
-                await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 0 });
+                await page.goto(url, { waitUntil: 'networkidle2' , timeout: 60000 });
                 console.log("url:waitForSelector");
                 await page.waitForSelector('div[name=\'reportManifest\']');
                 console.log("url:$eval");
