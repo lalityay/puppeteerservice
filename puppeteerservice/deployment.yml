@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hbservice-deployment
+  labels:
+    app: hbservice
+    type: api
+spec:
+  template:
+    metadata:
+      name: hbservice-pod
+      labels:
+        app: hbservice
+    spec:
+      containers:
+        - name: hbservice-container
+          image: hbservice
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: hbservice
+
+
+      #kubectl apply -f deployment.yml

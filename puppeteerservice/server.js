@@ -4,7 +4,7 @@ var port = process.env.PORT || 8080;
 
 const server = http.createServer();
 //const chromium = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
 var fs = require('fs');
 
@@ -29,13 +29,19 @@ async function someAsyncFunc() {
 
     try {
         browser = await puppeteer.launch({
-            headless: false,
-            args: ['--headless'],
+            headless: true,
+            executablePath: '/usr/bin/google-chrome',
+            //args: ['--headless','--no-sandbox'],
+            args: ['--no-sandbox'],
         });
+        
 
         let page = await browser.newPage();
-
-        var contents = fs.readFileSync('cookie.txt', 'utf8');
+        const version = await page.browser().version();
+        console.log(version);
+        var filename=process.cwd()+'/cookie.txt';
+        var contents = fs.readFileSync(filename, 'utf8');
+        
         console.log(contents);
 
         var headers = {
@@ -89,7 +95,7 @@ async function someAsyncFunc() {
         }
 
     } catch (error) {
-        return context.fail(error);
+        return console.error(error);
     } finally {
         if (browser !== null) {
             await browser.close();

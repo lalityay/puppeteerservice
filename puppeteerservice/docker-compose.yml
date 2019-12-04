@@ -1,0 +1,48 @@
+version: "3"
+services:
+  app:
+    image: hbservice
+    ports:
+      - 9090:8080
+    deploy:
+        mode: replicated
+        replicas: 3
+        mode: replicated
+        resources:
+          # Hard limit - Docker does not allow to allocate more
+          limits:
+            cpus: '0.25'
+            memory: 512M
+          # Soft limit - Docker makes best effort to return to it
+          reservations:
+            cpus: '0.25'
+            memory: 256M
+        # service restart policy
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
+        # service update configuration
+        update_config:
+          parallelism: 1
+          delay: 10s
+          failure_action: continue
+          monitor: 60s
+          max_failure_ratio: 0.3
+        # placement constraint - in this case on 'worker' nodes only
+        #placement:
+          #constraints: [node.role == worker]  
+
+
+
+
+
+          #sudo docker stack rm stackdemo
+          #sudo docker stack deploy --compose-file docker-compose.yml stackdemo
+          #sudo docker stack services stackdemo
+          #sudo docker stats -a
+          #sudo docker stack ps stackdemo
+
+
+

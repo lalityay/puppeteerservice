@@ -3,11 +3,13 @@
   "version": "0.0.0",
   "description": "puppeteerservice",
   "main": "server.js",
-  "author": {
-    "name": ""
-  },
+  "author": "",
   "dependencies": {
-    "puppeteer": "^2.0.0",
     "puppeteer-core": "^2.0.0"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "devDependencies": {},
+  "license": "ISC"
 }
